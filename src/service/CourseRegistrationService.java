@@ -24,12 +24,13 @@ public class CourseRegistrationService {
 
 	// 학생 신청한 과정신청 취소하기
 	public void cancelCourseRegistration(int regNo, String studentId) {
-		Course course = courseDao.getCouseByRegNo(regNo);
-		CourseRegistration reg = courseRegistrationDao.getRegistrationsByRegNoStudentId(regNo, studentId);
-
-		if (!reg.getStudentId().equals(studentId)) {
+		CourseRegistration reg = courseRegistrationDao.getRegistrationByRegNo(regNo);
+		if (reg == null || !reg.getStudentId().equals(studentId)) {
 			throw new RuntimeException("입력한 신청 과정이 존재하지 않습니다.");
 		}
+		
+		Course course = courseDao.getCouseByNo(reg.getCourseNo());
+		
 		if (course.getStatus().equals("모집완료")) {
 			course.setStatus("모집중");
 		}

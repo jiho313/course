@@ -55,7 +55,7 @@ public class CourseRegistrationDao {
 	}	
 	
 	// 과정 번호로 개설한 수강과정 조회하기
-	public CourseRegistration getRegistrationsByCourseNo(int courseNo) {
+	public CourseRegistration getRegistrationByCourseNo(int courseNo) {
 		String sql = "select reg_no, student_id, course_no, reg_canceled, reg_create_date "
 				+ "from academy_course_registrations "
 				+ "where course_no = ? ";
@@ -91,19 +91,17 @@ public class CourseRegistrationDao {
 		}				
 	}
 	
-	// 과정 번호와 학생 아이디로 수강신청한 수강과정 조회하기
-	public CourseRegistration getRegistrationsByRegNoStudentId(int regNo, String studentId) {
+	// 과정 번호를 입력받아 수강신청한 수강과정 조회하기
+	public CourseRegistration getRegistrationByRegNo(int regNo) {
 		String sql = "select reg_no, student_id, course_no, reg_canceled, reg_create_date "
 				+ "from academy_course_registrations "
-				+ "where reg_no = ? "
-				+ "and student_id = ?";
+				+ "where reg_no = ? ";
 		try {
 			CourseRegistration reg = null;
 			
 			Connection conn = ConnUtils.getConnection();
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, regNo);
-			pstmt.setString(2, studentId);
 			
 			ResultSet rs = pstmt.executeQuery();
 			
@@ -129,7 +127,7 @@ public class CourseRegistrationDao {
 		}				
 	}
 	
-	// 학생 아이디로 신청한 과정 모두 조회하기
+	// 학생 아이디로 신청한 수강신청 목록 모두 조회하기
 	public List<CourseRegistrationDto> getRegistrationsById(String studentId) {
 		String sql = "select r.reg_no, r.reg_create_date, r.reg_canceled, c.course_name "
 				+ "from academy_course_registrations r, academy_courses c "
@@ -166,40 +164,7 @@ public class CourseRegistrationDao {
 		}		
 	}
 	
-	// 학생 아이디로 신청한 과정 조회하기
-	public CourseRegistration getSingleRegistrationById(String studentId) {
-		String sql = "select reg_no, student_id, course_no"
-				+ ", reg_canceled, reg_create_date "
-				+ "from academy_course_registrations "
-				+ "where student_id = ? ";
-		try {
-			CourseRegistration reg = null;
-			
-			Connection conn = ConnUtils.getConnection();
-			PreparedStatement pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, studentId);
-			
-			ResultSet rs = pstmt.executeQuery();
-			
-			if(rs.next()) {
-				reg = new CourseRegistration();
-				reg.setRegNo(rs.getInt("reg_no"));
-				reg.setStudentId(rs.getString("student_id"));
-				reg.setCourseNo(rs.getInt("course_no"));
-				reg.setRegCanceled(rs.getString("reg_canceled"));
-				reg.setRegCreateDate(rs.getDate("reg_create_date"));
-			}
-
-			pstmt.close();
-			conn.close();
-
-			return reg;
-			
-		} catch (SQLException ex) {
-			throw new RuntimeException(ex);
-		}		
-	}
-	// 과정신청하기
+	// 수강 신청하기
 	public void insertCourseRegistration(String studentId, int courseNo) {
 		String sql = "insert into academy_course_registrations " + "(reg_no, student_id, course_no) " + "values "
 				+ "(reg_seq.nextval, ?, ?) ";
