@@ -8,6 +8,7 @@ import dao.CourseRegistrationDao;
 import dao.TeacherDao;
 import dto.CourseDetailDto;
 import vo.Course;
+import vo.CourseRegistration;
 import vo.Teacher;
 
 public class TeacherService {
@@ -37,14 +38,15 @@ public class TeacherService {
 	// 개설한 강좌 정보 폐쇄하기
 	public void deleteCourse(int courseNo, String teacherId) {
 		Course course = courseDao.getCouseByNo(courseNo);
-
-		if (course == null || !course.getTeacherId().equals(teacherId)) {
+		CourseRegistration courseRegistration = courseRegistrationDao.getRegistrationByCourseNo(courseNo);
+		if (course == null || !teacherId.equals(course.getTeacherId())) {
 			throw new RuntimeException("본인이 개설한 강좌만 폐쇄 가능합니다.");
 		}
-
+		
 		course.setStatus("과정취소");
+		courseRegistration.setRegCanceled("Y");
 		courseDao.updateCourse(course);
-		courseRegistrationDao.canceledCourseRegistrationByCourseNo(courseNo);
+		courseRegistrationDao.updateCourseRegistrationByCourseNo(courseRegistration);
 
 	}
 

@@ -5,50 +5,55 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import util.ConnUtils;
-import vo.Course;
 import vo.Student;
 
 public class StudentDao {
 	
 	// 싱글톤 패턴: 기능이 구현된 객체는 객체를 하나만 생성시키게 해야한다.
-	private static StudentDao intance = new StudentDao();
-	private StudentDao() {};
-	public static StudentDao getInstance() {
+	private static StudentDao intance = new StudentDao(); // ->
+	private StudentDao() {}; // -> 외부에서 객체 생성 방지
+	public static StudentDao getInstance() { // -> 로드한 인스턴스 호출
 		return intance;
 	}
 	
 	// 상태가 '모집중'인 과정을 모두 조회하기
-	public List<Course> getCourses() {
-		String sql = "select c.course_no, c.course_quota, c.course_req_cnt, t.teacher_id, c.course_name "
+	public List<Map<String, Object>> getCourses(String status) {
+		String sql = "select c.course_no, c.course_quota, c.course_req_cnt, t.teacher_id, c.course_name, t.teacher_name "
 				+ "from academy_courses c, academy_teachers t "
 				+ "where c.teacher_id = t.teacher_id "
-				+ "and c.course_status = '모집중' "
+				+ "and c.course_status = ? "
 				+ "order by c.course_no asc";
 		try {
-			List<Course> courses = new ArrayList<>();
+			List<Map<String, Object>> courses = new ArrayList<>();
 
 			Connection conn = ConnUtils.getConnection();
 			PreparedStatement pstmt = conn.prepareStatement(sql);
-			ResultSet rs = pstmt.executeQuery();
+			pstmt.setString(1, status);
 
+			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
-				Course course =  new Course();
-				course.setNo(rs.getInt("course_no"));
-				course.setquota(rs.getInt("course_quota"));
-				course.setReqCnt(rs.getInt("course_req_cnt"));
-				course.setTeacherId(rs.getString("teacher_id"));
-				course.setName(rs.getString("course_name"));
+				Map<String, Object> map = new HashMap<>();
 				
-				courses.add(course);
+				map.put("no", rs.getInt("course_no"));
+				map.put("name", rs.getString("course_name"));
+				map.put("quota", rs.getInt("course_quota"));
+				map.put("reqCnt", rs.getInt("course_req_cnt"));
+				map.put("teacherId", rs.getString("teacher_id"));
+				map.put("teacherName", rs.getString("teacher_name"));
+				
+				courses.add(map);
+
 			}
-			
+
 			rs.close();
 			pstmt.close();
 			conn.close();
-			
+
 			return courses;
 		} catch (SQLException ex) {
 			throw new RuntimeException(ex);

@@ -1,9 +1,10 @@
 package controller;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import dto.CourseDetailDto;
-import dto.CourseRegistrationDto;
 import service.CourseRegistrationService;
 import service.StudentService;
 import service.TeacherService;
@@ -209,16 +210,24 @@ public class CourseController {
 	private void 학생과정조회() {
 		System.out.println("<< 학생과정조회 >>");
 
-		List<Course> courses = studentService.getAllCourses();
+		List<Map<String, Object>> courses = studentService.getAllCourses();
 		
+		// DTO대신 Map에 테이블을 조인해서 얻을 수 있는 값을 저장하고 조회하기
+		// 맵에서 값을 꺼낼때는 key가 문자열이기 때문에 오타에 주의한다.
 		System.out.println("과정번호\t모집정원\t신청자수\t담당강사명\t과정명");
 		System.out.println("--------------------------------------------------");
-		for(Course course : courses) {
-			System.out.print(course.getNo()+ "\t");
-			System.out.print(course.getquota()+ "\t");
-			System.out.print(course.getReqCnt()+ "\t");
-			System.out.print(course.getTeacherId()+ "\t");
-			System.out.println(course.getName());
+		for(Map<String, Object> map : courses) {
+			int no = (Integer) map.get("no");
+			int quota = (Integer) map.get("quota");
+			int reqCnt = (Integer) map.get("reqCnt");
+			String teacherName = (String) map.get("teacherName");
+			String name = (String) map.get("name");
+			
+			System.out.print(no + "\t");
+			System.out.print(quota + "\t");
+			System.out.print(reqCnt + "\t");
+			System.out.print(teacherName + "\t");
+			System.out.println(name);
 			System.out.println("--------------------------------------------------");
 		}
 		
@@ -249,15 +258,22 @@ public class CourseController {
 
 	private void 학생신청현황조회() {
 		System.out.println("<< 학생신청현황조회 >>");
-		List<CourseRegistrationDto> dtos = courseRegistrationService.getAllRegistrationsByNoI(loginUser.getId());
+		
+		// DTO대신 Map에 테이블을 조인해서 얻을 수 있는 값을 저장하고 조회하기 
+		List<Map<String, Object>> regs = courseRegistrationService.getAllRegistrationsByNoI(loginUser.getId());
 		System.out.println("등록번호\t등록일자\t\t취소여부\t과정명");
 		System.out.println("----------------------------------------------------");
 		
-		for (CourseRegistrationDto dto : dtos) {
-			System.out.print(dto.getRegNo() + "\t");
-			System.out.print(dto.getRegCreateDate() + "\t");
-			System.out.print(dto.getRegCanceled() + "\t");
-			System.out.println(dto.getCourseName());
+		for (Map<String, Object> map : regs) {
+			int no = (Integer)map.get("no");
+			Date createDate = (Date)map.get("createDate");
+			String canceled = (String)map.get("canceled");
+			String name = (String)map.get("name");
+			
+			System.out.print(no + "\t");
+			System.out.print(createDate + "\t");
+			System.out.print(canceled + "\t");
+			System.out.println(name);
 			System.out.println("----------------------------------------------------");
 		}
 	}
@@ -321,6 +337,7 @@ public class CourseController {
 		System.out.println("### 개설하신 과정 번호를 입력하세요.");
 		int courseNo = reader.readInt();
 		
+		// 조인한 테이블의 값을 Map에 저장하지 않고 CourseDetailDto클래스를 생성하여 값 저장하고 조회하기
 		List<CourseDetailDto> dtos = teacherService.getCourseDetailDtoByCousreNo(courseNo, loginUser.getId());
 		System.out.println("과정번호\t과정명\t모집정원\t신청자수\t과정상태\t개설날짜\t\t강사아이디\t수강학생아이디");
 		System.out.println("-----------------------------------------------------------------------");
