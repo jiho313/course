@@ -10,6 +10,12 @@ import vo.Course;
 
 public class CourseDao {
 	
+	private static CourseDao instance = new CourseDao();
+	private CourseDao() {};
+	public static CourseDao getInstance() {
+		return instance;
+	}
+	
 	// 과정 번호를 입력받아 해당 과정 불러오기
 	public Course getCouseByNo(int courseNo) {
 		String sql = "select course_no, course_name, course_quota, course_req_cnt, "
@@ -50,7 +56,7 @@ public class CourseDao {
 		}
 	}		
 		
-	// 과정 정보를 입력받아 과정 정보 변경하기 
+	// 과정 객체를 입력받아 과정 정보 변경하기 
 	public void updateCourse(Course course) {
 		String sql = "update academy_courses "
 				+ "set course_name = ?, "

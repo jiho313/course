@@ -88,4 +88,13 @@ public class Teacher {
 		this.createDate = createDate;
 	}
 
+	@Override
+	public String toString() {
+		return "Teacher [id=" + id + ", password=" + password + ", name=" + name + ", phone=" + phone + ", email="
+				+ email + ", salary=" + salary + ", retired=" + retired + ", createDate=" + createDate + ", type="
+				+ type + "]";
+	}
+	
+	
+
 }

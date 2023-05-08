@@ -13,6 +13,13 @@ import vo.Student;
 
 public class StudentDao {
 	
+	// 싱글톤 패턴: 기능이 구현된 객체는 객체를 하나만 생성시키게 해야한다.
+	private static StudentDao intance = new StudentDao();
+	private StudentDao() {};
+	public static StudentDao getInstance() {
+		return intance;
+	}
+	
 	// 상태가 '모집중'인 과정을 모두 조회하기
 	public List<Course> getCourses() {
 		String sql = "select c.course_no, c.course_quota, c.course_req_cnt, t.teacher_id, c.course_name "

@@ -50,4 +50,11 @@ public class CourseRegistration {
 		this.regCreateDate = regCreateDate;
 	}
 
+	@Override
+	public String toString() {
+		return "CourseRegistration [regNo=" + regNo + ", studentId=" + studentId + ", courseNo=" + courseNo
+				+ ", regCanceled=" + regCanceled + ", regCreateDate=" + regCreateDate + "]";
+	}
+
+	
 }

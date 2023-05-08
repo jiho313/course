@@ -72,4 +72,10 @@ public class Student {
 		this.createDate = createDate;
 	}
 
+	@Override
+	public String toString() {
+		return "Student [id=" + id + ", password=" + password + ", name=" + name + ", phone=" + phone + ", email="
+				+ email + ", deleted=" + deleted + ", createDate=" + createDate + ", type=" + type + "]";
+	}
 }
+

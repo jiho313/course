@@ -11,9 +11,16 @@ import vo.Course;
 import vo.Teacher;
 
 public class TeacherService {
-	private TeacherDao teacherDao = new TeacherDao();
-	private CourseDao courseDao = new CourseDao();
-	private CourseRegistrationDao courseRegistrationDao = new CourseRegistrationDao();
+	
+	private static TeacherService instance = new TeacherService();
+	private TeacherService() {};
+	public static TeacherService getInstance() {
+		return instance;
+	}
+	
+	private TeacherDao teacherDao = TeacherDao.getInstance();
+	private CourseDao courseDao = CourseDao.getInstance();
+	private CourseRegistrationDao courseRegistrationDao = CourseRegistrationDao.getInstance();
 
 	// 개설한 과정 번호로 강좌 상세 조회하기
 	public List<CourseDetailDto> getCourseDetailDtoByCousreNo(int courseNo, String teacherId) {

@@ -14,12 +14,14 @@ import vo.Teacher;
 
 public class CourseController {
 
-	private KeyboardReader reader = new KeyboardReader();
+	private KeyboardReader reader = new KeyboardReader(); // 그럼 얘도 원래는 싱글톤 패턴이 구현되어야 하나?
 	private LoginUser loginUser;
-
-	private StudentService studentService = new StudentService();
-	private TeacherService teacherService = new TeacherService();
-	private CourseRegistrationService courseRegistrationService = new CourseRegistrationService();
+	
+	// 기능을 가지고 있는 객체로 싱글톤 패턴이 구현되어 있기 때문에 스태틱 메서드 .getInstance메서드를 이용해 
+	// 서비스 객체를 생성한다.
+	private StudentService studentService = StudentService.getInstance();
+	private TeacherService teacherService = TeacherService.getInstance();
+	private CourseRegistrationService courseRegistrationService = CourseRegistrationService.getInstance();
 
 	public void menu() {
 
@@ -125,7 +127,7 @@ public class CourseController {
 		String password = reader.readString();
 
 		loginUser = studentService.login(id, password);
-
+		
 		System.out.print("로그인이 완료되었습니다!");
 
 	}

@@ -4,13 +4,22 @@ import java.util.List;
 
 import dao.CourseDao;
 import dao.CourseRegistrationDao;
+import dao.StudentDao;
 import dto.CourseRegistrationDto;
 import vo.Course;
 import vo.CourseRegistration;
 
 public class CourseRegistrationService {
-	private CourseDao courseDao = new CourseDao();
-	private CourseRegistrationDao courseRegistrationDao = new CourseRegistrationDao();
+	
+	private static CourseRegistrationService intance = new CourseRegistrationService();
+	private CourseRegistrationService() {};
+	public static CourseRegistrationService getInstance() {
+		return intance;
+	}
+	
+	
+	private CourseDao courseDao = CourseDao.getInstance();
+	private CourseRegistrationDao courseRegistrationDao = CourseRegistrationDao.getInstance();
 
 	// 학생 아이디로 신청한 과정 모두 조회하기
 	public List<CourseRegistrationDto> getAllRegistrationsByNoI(String studentId) {

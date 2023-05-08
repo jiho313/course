@@ -13,6 +13,12 @@ import vo.CourseRegistration;
 
 public class CourseRegistrationDao {
 	
+	private static CourseRegistrationDao instance = new CourseRegistrationDao();
+	private CourseRegistrationDao() {};
+	public static CourseRegistrationDao getInstance() {
+		return instance;
+	}
+	
 	// 수강신청 번호를 입력 받아 수강신청 정보 변경하기
 	public void canceledCourseRegistrationByCourseNo(int courseNo) {
 		String sql = "update academy_course_registrations "

@@ -68,4 +68,11 @@ public class Course {
 		this.teacherId = teacherId;
 	}
 
+	@Override
+	public String toString() {
+		return "Course [no=" + no + ", name=" + name + ", quota=" + quota + ", reqCnt=" + reqCnt + ", status=" + status
+				+ ", createDate=" + createDate + ", teacherId=" + teacherId + "]";
+	}
+
+	
 }

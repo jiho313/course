@@ -14,6 +14,11 @@ import vo.Teacher;
 
 public class TeacherDao {
 
+	private static TeacherDao instance = new TeacherDao();
+	private TeacherDao() {};
+	public static TeacherDao getInstance() {
+		return instance;
+	}
 
 	// 강좌 번호로 강사가 개설한 강좌 상세 조회
 	public List<CourseDetailDto> getCourseDetailDtoByNo(int courseNo, String teacherId){
