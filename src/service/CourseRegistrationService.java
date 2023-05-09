@@ -39,7 +39,7 @@ public class CourseRegistrationService {
 		}
 
 		if ("Y".equals(reg.getRegCanceled())){
-			throw new RuntimeException("이미 수강취소처리된 과정입니다.");
+			throw new RuntimeException("이미 수강취소 처리된 과정입니다.");
 		}
 		
 		if (!studentId.equals(reg.getStudentId())) {
@@ -47,7 +47,7 @@ public class CourseRegistrationService {
 		}
 		
 		reg.setRegCanceled("Y");
-		courseRegistrationDao.updateCourseRegistrationByRegNo(reg);
+		courseRegistrationDao.updateCourseRegistration(reg, false);
 
 		Course course = courseDao.getCouseByNo(reg.getCourseNo());
 		course.setReqCnt(course.getReqCnt() - 1);

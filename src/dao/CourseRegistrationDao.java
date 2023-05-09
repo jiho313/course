@@ -20,10 +20,11 @@ public class CourseRegistrationDao {
 		return instance;
 	}
 	
-	public void updateCourseRegistrationByCourseNo(CourseRegistration reg) {
+	// CourseRegistration객체를 전달받아 해당하는 테이블의 상태를 변경하는 DAO계층메서드
+	public void updateCourseRegistration(CourseRegistration reg, boolean isTeacher) {
 		String sql = "update academy_course_registrations "
 				+ "set reg_canceled = ? "
-				+ "where course_no = ? ";
+				+ (isTeacher ? "where course_no = ? " : "where reg_no = ?" );
 		try {
 			Connection conn = ConnUtils.getConnection();
 			PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -40,28 +41,7 @@ public class CourseRegistrationDao {
 			throw new RuntimeException(ex);
 		}
 	}		
-	
-	public void updateCourseRegistrationByRegNo(CourseRegistration reg) {
-		String sql = "update academy_course_registrations "
-				+ "set reg_canceled = ? "
-				+ "where reg_no = ? ";
-		try {
-			Connection conn = ConnUtils.getConnection();
-			PreparedStatement pstmt = conn.prepareStatement(sql);
-			
-			pstmt.setString(1, reg.getRegCanceled());
-			pstmt.setInt(2, reg.getRegNo());
-			
-			pstmt.executeUpdate();
-			
-			pstmt.close();
-			conn.close();
-	
-		} catch (SQLException ex) {
-			throw new RuntimeException(ex);
-		}
-	}		
-	
+		
 	// 과정 번호로 개설한 수강과정 조회하기
 	public CourseRegistration getRegistrationByCourseNo(String studentId, int courseNo) {
 		String sql = "select reg_no, student_id, course_no, reg_canceled, reg_create_date "

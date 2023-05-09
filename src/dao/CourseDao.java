@@ -69,7 +69,7 @@ public class CourseDao {
 			course.getName(), 
 			course.getquota(), 
 			course.getReqCnt(), 
-			course.getStatus());
-	
+			course.getStatus(),
+			course.getNo());
 	}
 }
