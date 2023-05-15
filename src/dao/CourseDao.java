@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import util.ConnUtils;
+import util.DaoHelper;
 import vo.Course;
 
 public class CourseDao {
@@ -64,24 +65,11 @@ public class CourseDao {
 				+ 	  "course_req_cnt = ?, "
 				+ 	  "course_status =? "
 				+ "where course_no = ? ";
-		try {
-			Connection conn = ConnUtils.getConnection();
-			PreparedStatement pstmt = conn.prepareStatement(sql);
-			
-			pstmt.setString(1, course.getName());
-			pstmt.setInt(2, course.getquota());
-			pstmt.setInt(3, course.getReqCnt());
-			pstmt.setString(4, course.getStatus());
-			pstmt.setInt(5, course.getNo());
-			
-			pstmt.executeUpdate();
-			
-			pstmt.close();
-			conn.close();
-	
-		} catch (SQLException ex) {
-			throw new RuntimeException(ex);
-		}
-	}		
-		
+	DaoHelper.update(sql, 
+			course.getName(), 
+			course.getquota(), 
+			course.getReqCnt(), 
+			course.getStatus(),
+			course.getNo());
+	}
 }

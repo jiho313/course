@@ -9,6 +9,7 @@ import java.util.List;
 
 import dto.CourseDetailDto;
 import util.ConnUtils;
+import util.DaoHelper;
 import vo.Course;
 import vo.Teacher;
 
@@ -109,21 +110,7 @@ public class TeacherDao {
 				+ "(course_no, course_name, course_quota, teacher_id) "
 				+ "values "
 				+ "(courses_seq.nextval, ?, ?, ?) ";
-		try {
-			Connection conn = ConnUtils.getConnection();
-			PreparedStatement pstmt = conn.prepareStatement(sql);
-			
-			pstmt.setString(1, course.getName());
-			pstmt.setInt(2, course.getquota());
-			pstmt.setString(3, course.getTeacherId());
-
-			pstmt.executeUpdate();
-			
-			pstmt.close();
-			conn.close();
-		} catch (SQLException ex) {
-			throw new RuntimeException(ex);
-		}		
+		DaoHelper.update(sql, course.getName(), course.getquota(), course.getTeacherId());
 	}
 		
 	// 강사 계정 중복체크

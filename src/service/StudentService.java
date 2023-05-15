@@ -1,17 +1,17 @@
 package service;
 
 import java.util.List;
+import java.util.Map;
 
 import controller.LoginUser;
 import dao.StudentDao;
-import vo.Course;
 import vo.Student;
 
 public class StudentService {
 	
 	// 기능이 구현되어 있는 객체는 객체를 한 개만 생성해야하기 때문에
 	// 싱글톤 패턴을 구현한다.
-	private static StudentService instance = new StudentService();
+	private static StudentService instance = new StudentService(); // 스태틱 변수
 	private StudentService() {};
 	public static StudentService getInstance() {
 		return instance;
@@ -20,11 +20,8 @@ public class StudentService {
 	private StudentDao studentDao = StudentDao.getInstance();
 	
 	// 학생 로그인 상태에서 과정 상태가 '모집중'인 모든 과정 조회하기
-	public List<Course> getAllCourses(){
-		if (studentDao.getCourses().isEmpty()) {
-			throw new RuntimeException("조회된 과정이 없습니다.");
-		}
-		return studentDao.getCourses();
+	public List<Map<String, Object>> getAllCourses(){
+		return studentDao.getCourses("모집중");
 	} 
 	
 	// 학생 로그인 하기
